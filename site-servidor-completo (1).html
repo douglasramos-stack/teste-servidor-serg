@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Holerite do Servidor</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: moldura branca sobre fundo bege; barra e destaque em bordô com detalhes dourados; cartões creme; cinco abas (Início, Atuação, Conteúdos, O Escritório, Contato). */
+:root {
+  --bg: #e9e5df;
+  --frame: #ffffff;
+  --band: #4b1528;
+  --band-fg: #ffffff;
+  --peach: #f3d7a1;
+  --gold: #b8975a;
+  --eyebrow: #8a6a2f;
+  --btn: #b8975a;
+  --btn-fg: #3b1020;
+  --card: #f4f1ec;
+  --card-2: #ece7e0;
+  --card-line: #e0d9cf;
+  --fg: #2a1a20;
+  --muted: #65565c;
+  --heading: #4b1528;
+  --footer-bg: #f6f4f0;
+  --wa: #0e7a3e;
+  --wa-fg: #ffffff;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #140a0f; --frame: #1e1117; --band: #3f1224; --band-fg: #ffffff; --peach: #f3d7a1;
+    --gold: #c9a96a; --eyebrow: #d2b27a; --btn: #c9a96a; --btn-fg: #2a0d18;
+    --card: #2a1a22; --card-2: #33212a; --card-line: #43303a;
+    --fg: #efe6e9; --muted: #b7a5ac; --heading: #f1dfe5; --footer-bg: #1a0f14;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #140a0f; --frame: #1e1117; --band: #3f1224; --band-fg: #ffffff; --peach: #f3d7a1;
+  --gold: #c9a96a; --eyebrow: #d2b27a; --btn: #c9a96a; --btn-fg: #2a0d18;
+  --card: #2a1a22; --card-2: #33212a; --card-line: #43303a;
+  --fg: #efe6e9; --muted: #b7a5ac; --heading: #f1dfe5; --footer-bg: #1a0f14;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 96px;
+}
+.frame { max-width: 1180px; margin: 0 auto; background: var(--frame); border-radius: 18px; padding: clamp(10px, 2vw, 16px); }
+a { color: var(--heading); }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+.ico { width: 20px; height: 20px; fill: currentColor; flex: none; }
+
+/* Barra superior */
+.top { background: var(--band); border-radius: 10px; padding: 16px clamp(16px, 3vw, 26px); display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; align-items: center; }
+.brand { color: var(--peach); font-weight: 700; font-size: 1.3rem; letter-spacing: 0.01em; text-transform: uppercase; line-height: 1.15; }
+.brand small { display: block; color: var(--band-fg); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.06em; margin-top: 4px; }
+nav.tabs { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+nav.tabs a { color: var(--band-fg); text-decoration: none; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding-block: 6px; border-bottom: 2px solid transparent; }
+nav.tabs a:hover { border-bottom-color: var(--gold); }
+nav.tabs a.on { border-bottom-color: var(--peach); color: var(--peach); }
+
+/* Destaque inicial */
+.hero { background: var(--band); color: var(--band-fg); border-radius: 10px; margin-top: 12px; padding: clamp(28px, 5vw, 56px) clamp(20px, 4vw, 38px); display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 32px; align-items: center; }
+.eyebrow { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--eyebrow); font-weight: 700; margin: 0 0 8px; }
+.hero .eyebrow { color: var(--peach); }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.1rem, 4.8vw, 3.3rem); line-height: 1.08; margin: 0 0 14px; text-wrap: balance; }
+h1 span { display: block; font-size: 0.56em; font-weight: 500; line-height: 1.2; margin-top: 8px; }
+.hero p.lead { color: #eadfe3; max-width: 54ch; margin: 0 0 22px; font-size: 1rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; background: var(--btn); color: var(--btn-fg); text-decoration: none; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 13px 20px; border-radius: 8px; border: 0; cursor: pointer; font-family: inherit; }
+.btn:hover { filter: brightness(1.08); }
+.btn-ghost { background: transparent; color: var(--band-fg); border: 1px solid rgba(255,255,255,0.45); }
+.btn-wa { background: var(--wa); color: var(--wa-fg); }
+.temple { color: var(--gold); width: 100%; max-width: 300px; justify-self: center; height: auto; }
+
+/* Seções */
+.block { padding: 34px 6px 6px; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 3.6vw, 2.2rem); line-height: 1.15; color: var(--heading); margin: 0 0 6px; text-wrap: balance; }
+.subhead { color: var(--muted); margin: 0 0 20px; max-width: 70ch; }
+.prose { max-width: 70ch; }
+.prose p { margin: 0 0 14px; color: var(--muted); }
+.prose p.strong { color: var(--fg); font-weight: 500; }
+.prose h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; color: var(--heading); margin: 0 0 8px; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.plain { margin: 0 0 14px; padding-left: 1.2em; color: var(--muted); }
+.plain li { margin-bottom: 5px; }
+.plain li::marker { color: var(--gold); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 12px; }
+.card { display: block; background: var(--card); border: 1px solid var(--card-line); border-radius: 10px; padding: 16px 18px; min-width: 0; text-decoration: none; color: inherit; }
+a.card:hover { border-color: var(--gold); }
+.card .n { display: block; color: var(--eyebrow); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; margin-bottom: 8px; }
+.card h3 { font-size: 1rem; font-weight: 700; line-height: 1.3; color: var(--heading); margin: 0 0 4px; }
+.card p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+.cards.wide { grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+.cards.wide .card { padding: 20px 22px; }
+.cards.wide .card h3 { font-family: var(--font-display); font-size: 1.15rem; }
+.stack { display: grid; gap: 12px; }
+
+.panels { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 14px; margin-top: 14px; }
+.panel { border-radius: 10px; padding: 22px 24px; min-width: 0; }
+.panel .eyebrow { margin-bottom: 8px; }
+.panel h3 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; line-height: 1.2; margin: 0 0 6px; }
+.panel p { margin: 0 0 12px; font-size: 0.92rem; }
+.panel.light { background: var(--card-2); }
+.panel.light h3 { color: var(--heading); }
+.panel.light p { color: var(--muted); }
+.panel.dark { background: var(--band); color: var(--band-fg); }
+.panel.dark .eyebrow { color: var(--peach); }
+.panel.dark p { color: #eadfe3; }
+.more { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; color: var(--eyebrow); }
+.panel.dark .more { color: var(--peach); }
+.more:hover { text-decoration: underline; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; padding: 0; list-style: none; }
+.chips a, .chips li { display: inline-block; background: var(--card); border: 1px solid var(--card-line); color: var(--heading); border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; font-weight: 500; text-decoration: none; }
+.chips a:hover { border-color: var(--gold); }
+
+.divider { border: 0; border-top: 1px solid var(--card-line); margin: 34px 0 0; }
+
+/* Holerite ilustrativo */
+.slip { background: var(--frame); border: 1px solid var(--card-line); border-radius: 8px; padding: 18px 18px 14px; min-width: 0; }
+.slip-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid var(--card-line); }
+.slip table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 4px; }
+.slip th { text-align: left; font-family: var(--font-mono); font-weight: 500; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 10px 6px 6px; }
+.slip td { padding: 8px 6px; border-top: 1px dashed var(--card-line); vertical-align: top; }
+.slip td.tag { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); white-space: nowrap; text-align: right; }
+.slip tr.focus td { background: var(--card); }
+.slip-note { font-size: 0.78rem; color: var(--muted); margin: 12px 0 0; }
+
+/* Advogados */
+.lawyers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 12px; }
+.lawyer { background: var(--card); border: 1px solid var(--card-line); border-radius: 10px; padding: 24px; min-width: 0; }
+.lawyer h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; line-height: 1.2; color: var(--heading); margin: 0 0 4px; }
+.lawyer .oab { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; color: var(--eyebrow); margin: 0 0 16px; }
+.lawyer dl { margin: 0; display: grid; gap: 12px; }
+.lawyer dt { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 700; }
+.lawyer dd { margin: 2px 0 0; font-size: 0.95rem; }
+
+/* Contato */
+.contact { background: var(--card-2); border-radius: 10px; padding: 26px; display: grid; gap: 14px; max-width: 640px; }
+.contact dl { margin: 0; display: grid; gap: 12px; }
+.contact dt { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 700; }
+.contact dd { margin: 2px 0 0; }
+.phone { font-family: var(--font-mono); font-size: 1.05rem; }
+.copy { font: inherit; font-size: 0.82rem; color: var(--heading); background: transparent; border: 1px solid var(--gold); border-radius: 6px; padding: 3px 10px; cursor: pointer; margin-left: 8px; }
+
+footer { margin-top: 28px; }
+.foot-bar { background: var(--footer-bg); border-radius: 6px; padding: 14px 18px; display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); }
+.foot-bar span:last-child { font-weight: 500; }
+.foot-note { font-size: 0.8rem; color: var(--muted); margin: 12px 4px 4px; max-width: 90ch; }
+
+.float-wa {
+  position: fixed; z-index: 20;
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex; align-items: center; gap: 8px; background: var(--wa); color: var(--wa-fg);
+  text-decoration: none; font-weight: 600; font-size: 0.92rem; padding: 12px 16px; border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+}
+
+@media (max-width: 760px) {
+  .hero, .cols, .panels { grid-template-columns: minmax(0, 1fr); }
+  .temple { max-width: 190px; justify-self: start; }
+  .float-wa span { display: none; }
+  .float-wa { padding: 14px; }
+  .top { padding-block: 14px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .float-wa { transition: filter 0.15s ease; }
+}
+</style>
+</head>
+<body>
+
+<!-- SUBSTITUIR ANTES DE PUBLICAR: [NOME DO ESCRITÓRIO], [Nome do advogado], [número] da OAB, [e-mail], [endereço], [horário] e o número do WhatsApp (55 + DDD + número, só dígitos, nos links wa.me e no texto). -->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.9L2 22l5.25-1.38A9.9 9.9 0 1 0 12.04 2Zm0 18.1a8.2 8.2 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 1 1 7 3.87Zm4.5-6.14c-.25-.12-1.46-.72-1.69-.8-.23-.09-.39-.12-.56.12-.16.25-.64.8-.78.97-.14.16-.29.18-.54.06a6.7 6.7 0 0 1-3.3-2.88c-.25-.43.25-.4.72-1.33.08-.16.04-.3-.02-.42-.06-.12-.56-1.35-.77-1.85-.2-.48-.4-.42-.56-.42h-.47c-.16 0-.43.06-.65.3-.23.25-.87.85-.87 2.07s.9 2.4 1.02 2.56c.12.16 1.75 2.67 4.24 3.75 1.57.68 2.19.74 2.98.62.48-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.14-1.18-.06-.1-.23-.17-.48-.3Z"/></symbol>
+</svg>
+
+<div class="frame">
+  <header class="top">
+    <div class="brand">[Nome do escritório]<small>Advocacia | OAB/SP [número]</small></div>
+    <nav class="tabs" aria-label="Seções do site">
+      <a href="#inicio" data-tab="inicio" class="on">Início</a>
+      <a href="#atuacao" data-tab="atuacao">Atuação</a>
+      <a href="#conteudos" data-tab="conteudos">Conteúdos</a>
+      <a href="#escritorio" data-tab="escritorio">O escritório</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </header>
+
+  <!-- ABA: INÍCIO -->
+  <div data-view="inicio">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Direito dos servidores públicos estaduais</p>
+        <h1>Informação jurídica<span>sobre remuneração e evolução na carreira pública.</span></h1>
+        <p class="lead">Conteúdos sobre verbas remuneratórias, vantagens funcionais, tributos e regras específicas das carreiras estaduais.</p>
+        <div class="actions">
+          <a class="btn" href="#conteudos">Conheça os conteúdos</a>
+          <a class="btn btn-wa" href="https://wa.me/5511900000000" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Contato por WhatsApp</a>
+        </div>
+      </div>
+      <svg class="temple" viewBox="0 0 260 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+        <polygon points="18,62 130,10 242,62"/>
+        <line x1="18" y1="62" x2="242" y2="62"/>
+        <rect x="38" y="76" width="14" height="66" rx="7"/>
+        <rect x="84" y="76" width="14" height="66" rx="7"/>
+        <rect x="123" y="76" width="14" height="66" rx="7"/>
+        <rect x="162" y="76" width="14" height="66" rx="7"/>
+        <rect x="208" y="76" width="14" height="66" rx="7"/>
+        <line x1="26" y1="148" x2="234" y2="148"/>
+        <line x1="10" y1="158" x2="250" y2="158"/>
+      </svg>
+    </section>
+
+    <section class="block">
+      <p class="eyebrow">Temas jurídicos</p>
+      <h2>Áreas de atuação</h2>
+      <p class="subhead">Conheça assuntos relacionados à remuneração e à vida funcional dos servidores.</p>
+      <div class="cards">
+        <a class="card" href="#atuacao"><span class="n">01</span><h3>Verbas remuneratórias</h3><p>BR, adicionais, gratificações e reflexos.</p></a>
+        <a class="card" href="#imposto-de-renda"><span class="n">02</span><h3>Imposto de Renda</h3><p>Critérios tributários aplicáveis às verbas.</p></a>
+        <a class="card" href="#progressao"><span class="n">03</span><h3>Progressão funcional</h3><p>Evolução, enquadramento e carreira.</p></a>
+        <a class="card" href="#documentacao"><span class="n">04</span><h3>Documentação</h3><p>Holerites e histórico funcional.</p></a>
+      </div>
+
+      <div class="panels">
+        <div class="panel light">
+          <p class="eyebrow">Informação jurídica</p>
+          <h3>Entenda a composição da sua remuneração</h3>
+          <p>Artigos e materiais educativos sobre Bonificação por Resultado, descontos tributários e evolução funcional.</p>
+          <a class="more" href="#composicao">Ler o conteúdo →</a>
+        </div>
+        <div class="panel dark">
+          <p class="eyebrow">O escritório</p>
+          <p>Apresentação institucional, formação e identificação profissional dos advogados.</p>
+          <a class="more" href="#escritorio">Conhecer o escritório →</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ABA: ATUAÇÃO -->
+  <div data-view="atuacao" hidden>
+    <section class="block">
+      <p class="eyebrow">Temas jurídicos</p>
+      <h2>Áreas de atuação</h2>
+      <p class="subhead">Questões jurídicas relacionadas à remuneração e à evolução funcional</p>
+      <div class="prose">
+        <p>A remuneração dos servidores públicos estaduais envolve diferentes verbas, gratificações, adicionais e vantagens funcionais, cada uma sujeita a regras específicas de concessão, cálculo e pagamento.</p>
+        <p>A legislação aplicável e as particularidades de cada carreira podem influenciar a composição dos vencimentos e os reflexos de determinadas parcelas na remuneração.</p>
+        <p class="strong">Entre os temas jurídicos relacionados aos servidores públicos estaduais, destacam-se:</p>
+      </div>
+      <div class="cards wide" style="margin-top: 18px">
+        <article class="card"><h3>Bonificação por Resultado (BR) e Imposto de Renda</h3><p>Questões relacionadas à incidência tributária sobre a verba.</p></article>
+        <article class="card"><h3>Reflexos da Bonificação por Resultado</h3><p>Discussão sobre os critérios de cálculo e seus possíveis reflexos em férias, licença-prêmio paga em pecúnia e 13º salário.</p></article>
+        <article class="card"><h3>Progressões funcionais atrasadas</h3><p>Regras relacionadas à evolução na carreira e aos respectivos efeitos remuneratórios.</p></article>
+        <article class="card"><h3>Adicionais e sexta-parte sobre o artigo 133</h3><p>Questões envolvendo a composição e os critérios de cálculo dessas parcelas.</p></article>
+        <article class="card"><h3>Adicionais e sexta-parte sobre VPNI</h3><p>Aspectos relacionados à composição da remuneração e aos reflexos sobre vantagens pessoais.</p></article>
+        <article class="card"><h3>Gratificação Executiva</h3><p>Critérios de cálculo e possíveis reflexos sobre adicionais e sexta-parte.</p></article>
+        <article class="card"><h3>Vencimentos integrais</h3><p>Questões relacionadas ao recálculo da composição remuneratória, inclusive quanto aos reflexos sobre vantagens e sexta-parte.</p></article>
+        <article class="card"><h3>Gratificação de Representação</h3><p>Critérios de cálculo e possíveis reflexos sobre adicionais e sexta-parte.</p></article>
+        <article class="card"><h3>Incorporação de décimos</h3><p>Regras aplicáveis à incorporação de parcelas remuneratórias, conforme a legislação correspondente.</p></article>
+      </div>
+      <div class="prose" style="margin-top: 18px">
+        <p class="strong">A análise de cada tema depende da legislação vigente, da natureza jurídica das verbas, do histórico funcional e das regras específicas da carreira do servidor.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ABA: CONTEÚDOS -->
+  <div data-view="conteudos" hidden>
+    <section class="block">
+      <p class="eyebrow">Informação jurídica</p>
+      <h2>Conteúdos</h2>
+      <p class="subhead">Textos informativos sobre remuneração, tributação e carreira dos servidores públicos estaduais.</p>
+      <ul class="chips">
+        <li><a href="#composicao">Composição da remuneração</a></li>
+        <li><a href="#imposto-de-renda">Imposto de Renda</a></li>
+        <li><a href="#analise">Situação funcional</a></li>
+        <li><a href="#documentacao">Documentação</a></li>
+        <li><a href="#progressao">Progressão funcional</a></li>
+        <li><a href="#documentos-judiciais">Documentos para análise</a></li>
+      </ul>
+    </section>
+
+    <section class="block" id="composicao">
+      <h2>Você conhece a composição da sua remuneração?</h2>
+      <p class="subhead">Entenda os critérios que podem influenciar o seu holerite</p>
+      <div class="cols">
+        <div>
+          <div class="prose">
+            <p>A remuneração dos servidores públicos estaduais é composta por diferentes parcelas, que podem apresentar regras próprias de cálculo, pagamento e incidência tributária.</p>
+            <p class="strong">Entre os aspectos que merecem atenção estão:</p>
+          </div>
+          <div class="stack">
+            <div class="card"><span class="n">1</span><h3>Imposto de Renda sobre a Bonificação por Resultado</h3><p>Critérios relacionados à tributação dessa parcela.</p></div>
+            <div class="card"><span class="n">2</span><h3>Imposto de Renda sobre outras verbas remuneratórias</h3><p>Tratamento tributário de diferentes parcelas, inclusive possíveis reflexos no 13º salário.</p></div>
+            <div class="card"><span class="n">3</span><h3>Progressões e evoluções funcionais</h3><p>Regras de desenvolvimento na carreira, que variam conforme o cargo e a categoria.</p></div>
+          </div>
+        </div>
+        <aside class="slip" aria-label="Exemplo ilustrativo de holerite">
+          <div class="slip-head"><span>Demonstrativo de pagamento</span><span>Exemplo</span></div>
+          <table>
+            <thead><tr><th>Rubrica</th><th style="text-align:right">Natureza</th></tr></thead>
+            <tbody>
+              <tr><td>Vencimento</td><td class="tag">Provento</td></tr>
+              <tr><td>Adicional por tempo de serviço</td><td class="tag">Provento</td></tr>
+              <tr><td>Sexta-parte</td><td class="tag">Provento</td></tr>
+              <tr><td>Gratificação de representação</td><td class="tag">Provento</td></tr>
+              <tr class="focus"><td>Bonificação por Resultado (BR)</td><td class="tag">Provento</td></tr>
+              <tr class="focus"><td>Imposto de Renda (IRRF)</td><td class="tag">Desconto</td></tr>
+            </tbody>
+          </table>
+          <p class="slip-note">Ilustração com nomes de rubricas comuns. Não contém valores nem dados de servidores. A nomenclatura varia conforme o órgão e a carreira.</p>
+        </aside>
+      </div>
+      <div class="prose" style="margin-top: 20px">
+        <p>A composição remuneratória deve ser compreendida considerando a situação funcional do servidor, a natureza de cada verba e as normas aplicáveis à respectiva carreira.</p>
+        <p>Holerites e registros funcionais são documentos importantes para acompanhar a evolução da remuneração e compreender os critérios utilizados pela Administração Pública.</p>
+      </div>
+      <hr class="divider">
+    </section>
+
+    <section class="block" id="imposto-de-renda">
+      <h2>Imposto de Renda sobre verbas remuneratórias</h2>
+      <p class="subhead">Você conhece os critérios de incidência tributária aplicáveis ao seu holerite?</p>
+      <div class="cols">
+        <div class="prose">
+          <p>A incidência do Imposto de Renda sobre as parcelas recebidas pelos servidores públicos pode envolver diferentes critérios, conforme a natureza jurídica e a forma de pagamento de cada verba.</p>
+          <p>A análise desses assuntos exige a consideração da legislação aplicável, da natureza de cada verba e das circunstâncias específicas de seu pagamento.</p>
+          <p>A compreensão das regras tributárias é importante para conhecer os critérios utilizados na composição dos descontos registrados no holerite.</p>
+        </div>
+        <div class="panel light">
+          <h3>Entre os assuntos relacionados a esse tema estão:</h3>
+          <ul class="plain" style="margin:0">
+            <li>Imposto de Renda sobre a Bonificação por Resultado (BR);</li>
+            <li>Tratamento tributário do 13º salário;</li>
+            <li>Incidência de Imposto de Renda sobre outras verbas remuneratórias;</li>
+            <li>Reflexos tributários relacionados a diferentes parcelas da remuneração.</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="divider">
+    </section>
+
+    <section class="block" id="analise">
+      <h2>Análise da remuneração e da situação funcional</h2>
+      <div class="prose">
+        <p>Cada parcela da remuneração possui características próprias. Por isso, a compreensão de eventuais questões jurídicas depende da natureza da verba, da forma de pagamento e das regras específicas da carreira.</p>
+        <p>Os holerites, históricos funcionais e demais registros administrativos podem fornecer informações importantes sobre a trajetória remuneratória do servidor.</p>
+        <p>A documentação deve ser considerada em conjunto com a legislação aplicável e os entendimentos jurídicos pertinentes a cada assunto.</p>
+      </div>
+      <hr class="divider">
+    </section>
+
+    <section class="block" id="documentacao">
+      <h2>Documentação funcional e remuneratória</h2>
+      <p class="subhead">Quais documentos podem ser importantes para a análise de questões remuneratórias?</p>
+      <div class="cols">
+        <div class="prose">
+          <p>A documentação necessária varia conforme o tema jurídico e a situação funcional do servidor.</p>
+          <p>Em assuntos relacionados à Bonificação por Resultado (BR), Imposto de Renda e demais verbas remuneratórias, alguns documentos podem ser relevantes:</p>
+          <ul class="plain">
+            <li>Holerites com os registros de pagamento das verbas analisadas;</li>
+            <li>Demonstrativos de pagamento do 13º salário;</li>
+            <li>Registros de férias e licença-prêmio paga em pecúnia;</li>
+            <li>Histórico de pagamentos da Bonificação por Resultado;</li>
+            <li>Outros documentos funcionais relacionados às parcelas remuneratórias.</li>
+          </ul>
+        </div>
+        <div class="prose">
+          <p>Em determinadas situações, os registros dos últimos cinco anos podem ser relevantes para a análise do histórico de pagamentos, observados os prazos legais aplicáveis.</p>
+          <p>Também podem ser necessários documentos complementares, conforme o objeto da análise.</p>
+          <p>A documentação adequada permite compreender a evolução dos pagamentos e identificar os elementos necessários à avaliação jurídica da situação.</p>
+        </div>
+      </div>
+      <hr class="divider">
+    </section>
+
+    <section class="block" id="progressao">
+      <h2>Progressão funcional: como funciona?</h2>
+      <p class="subhead">Entenda as regras de evolução na carreira pública</p>
+      <div class="cols">
+        <div class="prose">
+          <p>A progressão funcional corresponde à movimentação do servidor dentro da estrutura de sua carreira, podendo envolver mudança de nível, grau ou faixa remuneratória.</p>
+          <p class="strong">Conforme as regras de cada categoria, essa evolução pode considerar critérios como:</p>
+          <ul class="plain">
+            <li>Tempo de serviço;</li>
+            <li>Avaliação de desempenho;</li>
+            <li>Escolaridade ou qualificação profissional;</li>
+            <li>Requisitos específicos previstos na legislação da carreira.</li>
+          </ul>
+          <p>Dependendo do regime funcional, a movimentação também pode receber denominações como evolução funcional ou promoção.</p>
+          <p>As regras variam conforme o cargo, a carreira e a legislação aplicável. Por isso, a compreensão da trajetória funcional exige a observação dos critérios estabelecidos para cada categoria.</p>
+        </div>
+        <div class="prose">
+          <h3>Documentos relacionados à evolução funcional</h3>
+          <p>Para compreender o histórico de progressões e movimentações na carreira, podem ser relevantes:</p>
+          <ul class="plain">
+            <li>Holerites do período analisado;</li>
+            <li>Ficha ou histórico funcional;</li>
+            <li>Data de ingresso no serviço público;</li>
+            <li>Registros das movimentações na carreira;</li>
+            <li>Publicações no Diário Oficial relativas a progressões, evoluções ou enquadramentos, quando existentes;</li>
+            <li>Identificação do cargo e da carreira.</li>
+          </ul>
+          <p>Esses registros ajudam a contextualizar a trajetória funcional e os efeitos remuneratórios das movimentações ocorridas ao longo do vínculo com a Administração Pública.</p>
+        </div>
+      </div>
+      <hr class="divider">
+    </section>
+
+    <section class="block" id="documentos-judiciais">
+      <h2>Documentos para a análise de questões judiciais</h2>
+      <div class="cols">
+        <div class="prose">
+          <p>A documentação necessária para a avaliação de uma questão jurídica depende do objeto envolvido e dos fatos relacionados à situação funcional do servidor.</p>
+          <p>Os holerites estão entre os documentos frequentemente utilizados, pois permitem observar a composição da remuneração e o histórico de pagamentos.</p>
+        </div>
+        <div class="prose">
+          <p>Em questões relacionadas à Bonificação por Resultado (BR) e à incidência de Imposto de Renda sobre essa verba, por exemplo, podem ser relevantes os holerites que contenham os respectivos pagamentos ao longo do período analisado.</p>
+          <p>Outros assuntos podem exigir documentos complementares, como fichas funcionais, demonstrativos específicos, publicações no Diário Oficial e registros administrativos.</p>
+          <p>A definição dos documentos necessários depende das particularidades de cada situação e dos requisitos jurídicos relacionados ao tema.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ABA: O ESCRITÓRIO. Preencher só com formação, títulos e áreas de atuação verdadeiros e comprováveis. Sem "melhor", "especialista" sem título, resultados, clientes ou valores. Para incluir outro advogado, copie um bloco <article class="lawyer">. -->
+  <div data-view="escritorio" hidden>
+    <section class="block">
+      <p class="eyebrow">Apresentação institucional</p>
+      <h2>O escritório</h2>
+      <p class="subhead">Formação, áreas de atuação e identificação profissional dos advogados</p>
+      <div class="prose">
+        <p>O escritório atua na advocacia em favor de servidores públicos estaduais de São Paulo, em questões jurídicas relacionadas à remuneração e à evolução funcional.</p>
+        <p>[Texto de apresentação do escritório: origem, forma de atuação e valores, em tom sóbrio e informativo.]</p>
+      </div>
+      <ul class="chips" style="margin-top: 14px">
+        <li>Direito Administrativo</li>
+        <li>Direito dos Servidores Públicos</li>
+        <li>Direito Tributário (Imposto de Renda sobre verbas remuneratórias)</li>
+      </ul>
+    </section>
+    <section class="block">
+      <h2>Advogados</h2>
+      <div class="lawyers" style="margin-top: 14px">
+        <article class="lawyer">
+          <h3>[Nome do advogado]</h3>
+          <p class="oab">OAB/SP nº [número]</p>
+          <dl>
+            <div><dt>Formação</dt><dd>[Graduação em Direito, instituição e ano de conclusão]</dd></div>
+            <div><dt>Pós-graduação e títulos</dt><dd>[Cursos de pós-graduação ou outros títulos, se houver]</dd></div>
+            <div><dt>Áreas de atuação</dt><dd>[Áreas de atuação do advogado]</dd></div>
+          </dl>
+        </article>
+        <article class="lawyer">
+          <h3>[Nome do advogado]</h3>
+          <p class="oab">OAB/SP nº [número]</p>
+          <dl>
+            <div><dt>Formação</dt><dd>[Graduação em Direito, instituição e ano de conclusão]</dd></div>
+            <div><dt>Pós-graduação e títulos</dt><dd>[Cursos de pós-graduação ou outros títulos, se houver]</dd></div>
+            <div><dt>Áreas de atuação</dt><dd>[Áreas de atuação do advogado]</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTATO: fica no final de todas as abas, acima do rodapé. -->
+  <section class="block" id="contato">
+    <div class="panel light">
+      <h3>Contato</h3>
+      <p>Para tirar dúvidas sobre os temas desta página, use o WhatsApp do escritório.</p>
+      <p><span class="phone" id="phone">(11) 90000-0000</span><button class="copy" id="copy" type="button">Copiar</button></p>
+      <a class="btn btn-wa" href="https://wa.me/5511900000000" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Abrir conversa no WhatsApp</a>
+      <p style="margin: 12px 0 0; font-size: 0.85rem">[e-mail do escritório]</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-bar"><span>[Nome do advogado] | Advogado – OAB/SP nº [número]</span><span>[Nome do escritório] · [Endereço do escritório]</span></div>
+    <p class="foot-note">Conteúdo de caráter exclusivamente informativo, elaborado conforme o Código de Ética e Disciplina e o Provimento 205/2021 do Conselho Federal da OAB. Não constitui promessa de resultado nem substitui consulta jurídica individual.</p>
+  </footer>
+</div>
+
+<a class="float-wa" href="https://wa.me/5511900000000" target="_blank" rel="noopener" aria-label="Contato por WhatsApp">
+  <svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>
+  <span>WhatsApp</span>
+</a>
+
+<script>
+(function () {
+  var btn = document.getElementById("copy");
+  var phone = document.getElementById("phone");
+  btn.addEventListener("click", function () {
+    var text = phone.textContent;
+    function done() { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar"; }, 1800); }
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(phone);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+})();
+
+(function () {
+  var views = Array.prototype.slice.call(document.querySelectorAll("[data-view]"));
+  var tabs = Array.prototype.slice.call(document.querySelectorAll("nav.tabs a[data-tab]"));
+  var names = views.map(function (v) { return v.getAttribute("data-view"); });
+  function show(name) {
+    views.forEach(function (v) { v.hidden = (v.getAttribute("data-view") !== name); });
+    tabs.forEach(function (a) {
+      var on = a.getAttribute("data-tab") === name;
+      a.classList.toggle("on", on);
+      if (on) { a.setAttribute("aria-current", "page"); } else { a.removeAttribute("aria-current"); }
+    });
+  }
+  function route() {
+    var id = "";
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { id = ""; }
+    if (!id || names.indexOf(id) !== -1) { show(id || "inicio"); window.scrollTo(0, 0); return; }
+    var el = document.getElementById(id);
+    var host = el && el.closest("[data-view]");
+    if (host) { show(host.getAttribute("data-view")); el.scrollIntoView(); }
+    else if (el) { el.scrollIntoView(); }
+    else { show("inicio"); window.scrollTo(0, 0); }
+  }
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
+
+</body>
+</html>
