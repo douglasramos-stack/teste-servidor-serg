@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Informação jurídica sobre remuneração e evolução funcional dos servidores públicos estaduais de São Paulo. Reginaldo Ananias Rodrigues, OAB/SP 400.558, Araçatuba.">
-<link rel="canonical" href="https://defesaservidorsp.com.br/">
+<link rel="canonical" href="https://reginaldoananiasadvocacia.com.br/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Reginaldo Ananias Rodrigues - Advocacia">
 <meta property="og:title" content="Reginaldo Ananias Rodrigues | Advocacia - Direito do Servidor Público">
 <meta property="og:description" content="Informação jurídica sobre remuneração e evolução funcional dos servidores públicos estaduais de São Paulo. Reginaldo Ananias Rodrigues, OAB/SP 400.558, Araçatuba.">
-<meta property="og:url" content="https://defesaservidorsp.com.br/">
+<meta property="og:url" content="https://reginaldoananiasadvocacia.com.br/">
 <meta name="theme-color" content="#4b1528">
 <title>Reginaldo Ananias Rodrigues | Advocacia - Direito do Servidor Público</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Public+Sans:wght@400;500;600;700&display=swap">
@@ -181,6 +181,10 @@ a.card:hover { border-color: var(--gold); }
 .contact dl { margin: 0; display: grid; gap: 12px; }
 .contact dt { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 700; }
 .contact dd { margin: 2px 0 0; }
+.contacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; margin: 4px 0 10px; }
+.contact { background: var(--card); border: 1px solid var(--card-line); border-radius: 8px; padding: 16px 18px; min-width: 0; }
+.contact strong { display: block; color: var(--heading); font-family: var(--font-display); font-size: 1.08rem; line-height: 1.25; }
+.contact .oab-line { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; color: var(--eyebrow); margin: 3px 0 12px; }
 .phone { font-family: var(--font-mono); font-size: 1.05rem; }
 .copy { font: inherit; font-size: 0.82rem; color: var(--heading); background: transparent; border: 1px solid var(--gold); border-radius: 6px; padding: 3px 10px; cursor: pointer; margin-left: 8px; }
 
@@ -723,9 +727,21 @@ footer { margin-top: 28px; }
   <section class="block" id="contato">
     <div class="panel light">
       <h3>Contato</h3>
-      <p>Para tirar dúvidas sobre os temas desta página, use o WhatsApp do escritório.</p>
-      <p><span class="phone" id="phone">(18) 99758-1555</span><button class="copy" id="copy" type="button">Copiar</button></p>
-      <a class="btn btn-wa" href="https://wa.me/5518997581555" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Abrir conversa no WhatsApp</a>
+      <p>Para tirar dúvidas sobre os temas desta página, fale com os advogados pelo WhatsApp.</p>
+      <div class="contacts">
+        <div class="contact">
+          <strong>Dr. Reginaldo Ananias Rodrigues</strong>
+          <span class="oab-line">OAB/SP 400.558</span>
+          <p><span class="phone">(18) 99758-1555</span><button class="copy" type="button" data-copy="(18) 99758-1555">Copiar</button></p>
+          <a class="btn btn-wa" href="https://wa.me/5518997581555" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Abrir conversa no WhatsApp</a>
+        </div>
+        <div class="contact">
+          <strong>Dra. Victória Assad Ayoub</strong>
+          <span class="oab-line">OAB/SP 483.137</span>
+          <p><span class="phone">(11) 91425-0391</span><button class="copy" type="button" data-copy="(11) 91425-0391">Copiar</button></p>
+          <a class="btn btn-wa" href="https://wa.me/5511914250391" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Abrir conversa no WhatsApp</a>
+        </div>
+      </div>
       <p style="margin: 12px 0 0; font-size: 0.85rem">E-mail: <a href="mailto:juridico.advaracatuba@gmail.com">juridico.advaracatuba@gmail.com</a><br>Rua Manoel Ferreira Damião, 395, São Joaquim, Araçatuba/SP</p>
     </div>
   </section>
@@ -753,16 +769,17 @@ footer { margin-top: 28px; }
 
 <script>
 (function () {
-  var btn = document.getElementById("copy");
-  var phone = document.getElementById("phone");
-  btn.addEventListener("click", function () {
-    var text = phone.textContent;
-    function done() { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar"; }, 1800); }
-    function fallback() {
-      var r = document.createRange(); r.selectNodeContents(phone);
-      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-    }
-    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  Array.prototype.slice.call(document.querySelectorAll("button.copy[data-copy]")).forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var phone = btn.previousElementSibling;
+      var text = btn.getAttribute("data-copy");
+      function done() { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar"; }, 1800); }
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(phone);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      }
+      try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+    });
   });
 })();
 
